@@ -1,0 +1,14 @@
+Delorean==0.4.2
+Django==1.6.5
+South==1.0
+Werkzeug==0.9.6
+# django-cors-headers is completely optional and probably makes sense only in development
+django-cors-headers==0.12
+django-extensions==1.3.8
+django-pipeline==1.3.25
+djangorestframework==2.3.14
+djangular==0.2.7
+drf-compound-fields==0.2.1
+ipython==2.1.0
+python-dateutil==2.2
+pytz==2014.4
