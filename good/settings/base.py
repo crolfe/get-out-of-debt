@@ -116,6 +116,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
+# sudo npm install -g cssmin
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
 PIPELINE_CSSMIN_BINARY = '/usr/bin/env cssmin'
 PIPELINE_CSSMIN_ARGUMENTS = ''
