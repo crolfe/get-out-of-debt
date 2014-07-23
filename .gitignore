@@ -1,5 +1,6 @@
 *.pyc
 *.sqlite3
+*.swp
 .idea
 bower_components
 static
