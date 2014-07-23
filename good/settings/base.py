@@ -106,10 +106,6 @@ STATICFILES_FINDERS = (
     'djangular.finders.NamespacedAngularAppDirectoriesFinder'
 )
 
-STATICFILES_DIRS = (
-    os.path.abspath(os.path.join('..', BASE_DIR, 'resources')),
-)
-
 STATIC_ROOT = os.path.abspath(os.path.join('..', BASE_DIR, 'static'))
 
 CORS_ORIGIN_ALLOW_ALL = True
