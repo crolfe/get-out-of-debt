@@ -1,4 +1,6 @@
-from .base import *
+import os
+
+from .base import *  # NOQA
 
 DEBUG = TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = ['debt.colinrolfe.com']

@@ -1,9 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
 
 from .views import CalculateLoanView
 
-urlpatterns = patterns(
-    '',
 
+urlpatterns = [
     url(r'^calculate$', CalculateLoanView.as_view()),
-)
+]

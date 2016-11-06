@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
-{% load compressed %}
+{% load pipeline %}
 {% block css %}
-    {% compressed_css 'loans_vendor' %}
-    {% compressed_css 'loans' %}
+  {% stylesheet 'vendor' %}
+  {% stylesheet 'loans' %}
 {% endblock css %}
 
 {% block main %}
 <div ng-app="loanApp">
-    <header ng-include="'/static/loans/views/partials/header.html'"></header>
-        <div ui-view></div>
+    <header ng-include="'/static/views/partials/header.html'"></header>
+    <div ui-view></div>
 </div>
 
 <!--[if lt IE 9]>
-{% compressed_js 'shims' %}
+{% javascript 'shims' %}
 <![endif]-->
 
+{% endblock main %}
 
-{% endblock main %}å
 {% block js_bottom %}
-    {% compressed_js 'loans_vendor' %}
-    {% compressed_js 'loans' %}
+    {% javascript 'vendor' %}
+    {% javascript 'loans' %}
 {% endblock js_bottom %}
-

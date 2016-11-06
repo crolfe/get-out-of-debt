@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Django settings for Get Out of Debt project.
 
@@ -9,18 +8,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+
+
+def local_path(path):
+    return os.path.join(BASE_DIR, path)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'xt*t8b7fc$fw_k@m1ua6k&t8q^ch6h+6!^^@k9!=n&kfct51+h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = TEMPLATE_DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -38,10 +40,8 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'django_extensions',
-    'south',
     'rest_framework',
     'corsheaders',
-    'djangular',
     'pipeline'
 )
 
@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'good.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': local_path('db.sqlite3'),
     }
 }
 
@@ -90,10 +90,24 @@ USE_L10N = True
 
 USE_TZ = True
 
-TEMPLATE_DIRS = (
-    (os.path.abspath(os.path.join(BASE_DIR, 'templates')))
-)
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [
+                local_path('templates')
+            ],
+    'APP_DIRS': True,
+    'OPTIONS': {'context_processors': [
+                    'django.contrib.auth.context_processors.auth',
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.i18n',
+                    'django.template.context_processors.media',
+                    'django.template.context_processors.static',
+                    'django.template.context_processors.tz',
+                    'django.contrib.messages.context_processors.messages'],
 
+                },
+    }
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -103,69 +117,74 @@ STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'djangular.finders.NamespacedAngularAppDirectoriesFinder'
+    'pipeline.finders.PipelineFinder'
 )
 
-STATIC_ROOT = os.path.abspath(os.path.join('..', BASE_DIR, 'static'))
+STATICFILES_DIRS = (
+    local_path('resources'),
+)
+
+STATIC_ROOT = local_path('static')
 
 CORS_ORIGIN_ALLOW_ALL = True
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
-# sudo npm install -g cssmin
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
-PIPELINE_CSSMIN_BINARY = '/usr/bin/env cssmin'
-PIPELINE_CSSMIN_ARGUMENTS = ''
 
 # npm install -g uglify-js
-# We use uglify instead of yuglify otherwise jQuery blows up
-PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
-PIPELINE_UGLIFYJS_BINARY = '/usr/bin/env uglifyjs'
-PIPELINE_UGLIFYJS_ARGUMENTS = ''
 
-PIPELINE_CSS = {
-    'loans_vendor': {
-        'source_filenames': (
-            'loans/css/foundation.css',
-            'loans/bower_components/ng-grid/ng-grid.css',
-        ),
-        'output_filename': 'loans/css/vendor.css'
+PIPELINE = {
+    # 'PIPELINE_COLLECTOR_ENABLED': True,
+    'STYLESHEETS': {
+        'vendor': {
+            'source_filenames': (
+                'css/foundation.css',
+                'js/bower_components/angular-ui-grid/ui-grid.css',
+                ),
+            'output_filename': 'loans/css/vendor.css'
+            },
+        'loans': {
+            'source_filenames': (
+                'loans/css/loans.css',
+                ),
+            'output_filename': 'loans/css/app.css'
+            }
     },
-    'loans': {
-        'source_filenames': (
-            'loans/styles/main.css',
-        ),
-        'output_filename': 'loans/css/app.css'
+    'JAVASCRIPT': {
+        'vendor': {
+            'source_filenames': (
+                'js/bower_components/chart.js/dist/Chart.js',
+                'js/bower_components/angular/angular.js',
+                'js/bower_components/angular-sanitize/angular-sanitize.js',
+                ('js/bower_components/angular-ui-router'
+                 '/release/angular-ui-router.js'),
+                'js/bower_components/angular-foundation/mm-foundation-tpls.js',
+                'js/bower_components/ng-grid/build/ng-grid.js',
+                'js/bower_components/moment/moment.js',
+                ('js/bower_components/tc-angular-chartjs/dist/'
+                 'tc-angular-chartjs.js'),
+            ),
+            'output_filename': 'js/vendor.js'
+        },
+        'loans': {
+            'source_filenames': (
+                'js/app.js',
+                'js/services/APIService.js',
+                'js/controllers/chartCtrl.js',
+            ),
+            'output_filename': 'js/loans-app.js'
+        },
+        'shims': {
+            'source_filenames': (
+                'js/bower_components/json3/lib/json3.min.js',
+                'js/bower_components/es5-shim/es5-shim.js'
+            ),
+            'output_filename': 'js/shims.js'
+        }
     }
 }
-PIPELINE_JS = {
-    'loans_vendor': {
-        'source_filenames': (
-            'loans/bower_components/jquery/dist/jquery.js',
-            'loans/bower_components/angular/angular.js',
-            'loans/bower_components/angular-sanitize/angular-sanitize.js',
-            'loans/bower_components/angular-ui-router/release/angular-ui-router.js',
-            'loans/bower_components/angular-foundation/mm-foundation-tpls.js',
-            'loans/bower_components/ng-grid/build/ng-grid.js',
-            'loans/bower_components/moment/moment.js',
-            'loans/bower_components/chartjs/Chart.min.js',
-            'loans/js/angular-chartjs.js',
-        ),
-        'output_filename': 'loans/js/vendor.js'
-    },
-    'loans': {
-        'source_filenames': (
-            'loans/js/app.js',
-            'loans/js/services/APIService.js',
-            'loans/js/controllers/chartCtrl.js',
-        ),
-        'output_filename': 'loans/js/loans-app.js'
-    },
-    'shims': {
-        'source_filenames': (
-            'loans/bower_components/json3/lib/json3.min.js',
-            'loans/bower_components/es5-shim/es5-shim.js'
-        ),
-        'output_filename': 'loans/js/shims.js'
-    }
-}
+
+# We use uglify instead of yuglify otherwise jQuery blows up
+PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
+
+PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.cssmin.NoopCompressor'

@@ -1,21 +1,25 @@
 from decimal import Decimal, ROUND_HALF_UP
 
 from django.core.exceptions import ValidationError
+from rest_framework import serializers as s
 
-from rest_framework import serializers
-from drf_compound_fields.fields import ListField
+
+MAX_REPAYMENT_PERIODS = 360   # 30 years * 12 months
 
 
 def round_decimal(amount):
     return amount.quantize(Decimal(".01"), rounding=ROUND_HALF_UP)
 
 
-class DebtSerializer(serializers.Serializer):
-    debt_name = serializers.CharField(max_length=255, required=False)
-    principal = serializers.DecimalField(decimal_places=2, max_digits=12)
-    interest_rate = serializers.DecimalField(decimal_places=2, max_digits=4)
-    monthly_payment = serializers.DecimalField(decimal_places=2, max_digits=12)
-    extra_payment = serializers.DecimalField(required=False, default=0.0, max_digits=12, decimal_places=2)
+class DebtSerializer(s.Serializer):
+    debt_name = s.CharField(max_length=255, allow_blank=True)
+    principal = s.DecimalField(required=True, decimal_places=2, max_digits=12,
+                               min_value=0.01)
+    interest_rate = s.DecimalField(decimal_places=2, max_digits=4, min_value=0)
+    monthly_payment = s.DecimalField(decimal_places=2, max_digits=12,
+                                     min_value=0.01)
+    extra_payment = s.DecimalField(default=0, max_digits=12,
+                                   min_value=0, decimal_places=2)
 
     def _get_num_payments(self, principal, monthly_payment):
         try:
@@ -26,22 +30,28 @@ class DebtSerializer(serializers.Serializer):
         except ZeroDivisionError:
             return 0
 
-    def validate_principal(self, attrs, source):
-        if attrs.get(source, Decimal(0)) == Decimal(0):
-            raise serializers.ValidationError('Please specify an amount > 0')
-        return attrs
+    def validate_principal(self, principal):
+        if principal == Decimal(0):
+            raise s.ValidationError('Please specify an amount > 0')
 
-    def validate_monthly_payment(self, attrs, source):
-        if attrs.get(source, Decimal(0)) == Decimal(0):
-            raise serializers.ValidationError('Please specify an amount > 0')
-        return attrs
+        return principal
+
+    def validate_monthly_payment(self, monthly_payment):
+        if monthly_payment == Decimal(0):
+            raise s.ValidationError('Please specify an amount > 0')
+        return monthly_payment
 
     def validate(self, attrs):
-        # prevent someone from entering more than 30 years worth of repayment information
-        total_monthly_payment = attrs['monthly_payment'] + attrs.get('extra_payment', 0)
-        num_payments = self._get_num_payments(attrs['principal'], total_monthly_payment)
-        if num_payments > 360:  # 30 years * 12 monthly payments - you're gonna have a bad time
-            raise ValidationError('This loan will take {} months to pay off (and will probably never be paid off).'.format(num_payments))
+        monthly_payment = attrs['monthly_payment']
+        extra_payment = attrs.get('extra_payment', Decimal(0))
+        total_monthly = monthly_payment + extra_payment
+        principal = attrs['principal']
+
+        num_payments = self._get_num_payments(principal, total_monthly)
+
+        if num_payments > MAX_REPAYMENT_PERIODS:
+            error = ('This loan will take {} months to pay off '
+                     '(and will probably never be paid off).')
+            raise ValidationError(error.format(num_payments))
+
         return attrs
-
-
