@@ -1,5 +1,23 @@
 {% extends 'base.html' %}
-{% block title %}{% endblock title %}
+{% load pipeline %}
+{% block css %}
+  {% stylesheet 'vendor' %}
+  {% stylesheet 'loans' %}
+{% endblock css %}
+
 {% block main %}
-LOANS
+<div ng-app="loanApp">
+    <header ng-include="'/static/views/partials/header.html'"></header>
+    <div ui-view></div>
+</div>
+
+<!--[if lt IE 9]>
+{% javascript 'shims' %}
+<![endif]-->
+
 {% endblock main %}
+
+{% block js_bottom %}
+    {% javascript 'vendor' %}
+    {% javascript 'loans' %}
+{% endblock js_bottom %}
