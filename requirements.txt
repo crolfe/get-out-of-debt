@@ -9,6 +9,3 @@ drf-compound-fields==0.2.1
 ipython==2.1.0
 python-dateutil==2.2
 pytz==2014.4
-
-gunicorn==19.6.0
-gevent==1.1.2
