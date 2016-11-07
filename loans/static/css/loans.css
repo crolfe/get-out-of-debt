@@ -1,0 +1,22 @@
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    height: 100% !important;
+}
+
+.ngViewport.ng-scope {
+    height: 100% !important;
+}
+
+.ngViewport.ng-scope > .ngCanvas {
+    width: 100% !important;
+}
+
+.ngViewport.ng-scope > .ngCanvas > .ng-scope {
+    width: 100% !important;
+    border-bottom-width: 0px !important;
+}
+
+.chart {
+ width: 500px;
+ height: 500px;
+}
