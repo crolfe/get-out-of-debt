@@ -1,9 +1,6 @@
 Django==1.9.11
 Werkzeug==0.9.6
 
-# django-cors-headers is completely optional and probably makes sense only in development
-django-cors-headers==0.12
-
 django-extensions==1.7.4
 django-pipeline==1.6.9
 djangorestframework==3.5.2
@@ -12,3 +9,6 @@ drf-compound-fields==0.2.1
 ipython==2.1.0
 python-dateutil==2.2
 pytz==2014.4
+
+gunicorn==19.6.0
+gevent==1.1.2

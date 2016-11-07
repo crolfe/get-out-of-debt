@@ -40,7 +40,6 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'django_extensions',
     'rest_framework',
-    'corsheaders',
     'pipeline'
 )
 
@@ -52,7 +51,6 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
 
 MIDDLEWARE_CLASSES = (
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
