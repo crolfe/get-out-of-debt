@@ -28,7 +28,10 @@ loans.controller('ChartCtrl', ['$scope', '$q', '$log', '$window', 'APIService', 
     }
   };
   $scope.calculate = function () {
-    var paymentsPromise = APIService.post(host + '/api/loans/calculate', $scope.debtRows);
+    $scope.debtRows.sort(function(a, b) {
+            return a.principal > b.principal;
+    })
+      var paymentsPromise = APIService.post(host + '/api/loans/calculate', $scope.debtRows);
     $q.all([paymentsPromise]).then(function (resultsArray) {
       $log.info(resultsArray);
       $scope.chartData = resultsArray[0];
