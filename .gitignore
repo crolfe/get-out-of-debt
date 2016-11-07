@@ -3,5 +3,6 @@
 *.swp
 .idea
 bower_components
+env/
 node_modules
 /static
