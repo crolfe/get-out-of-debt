@@ -17,7 +17,6 @@
   "dependencies": {
     "angular-foundation": "^0.8.0",
     "angular-sanitize": "^1.5.8",
-    "angular-ui-grid": "^3.2.9",
     "angular-ui-router": "^0.3.2",
     "es5-shim": "^4.5.9",
     "json3": "^3.3.2",

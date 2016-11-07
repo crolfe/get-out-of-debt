@@ -130,7 +130,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 
-# npm install -g uglify-js
 
 PIPELINE = {
     # 'PIPELINE_COLLECTOR_ENABLED': True,
@@ -138,7 +137,6 @@ PIPELINE = {
         'vendor': {
             'source_filenames': (
                 'css/foundation.css',
-                'js/bower_components/angular-ui-grid/ui-grid.css',
                 ),
             'output_filename': 'loans/css/vendor.css'
             },
@@ -158,7 +156,6 @@ PIPELINE = {
                 ('js/bower_components/angular-ui-router'
                  '/release/angular-ui-router.js'),
                 'js/bower_components/angular-foundation/mm-foundation-tpls.js',
-                'js/bower_components/ng-grid/build/ng-grid.js',
                 'js/bower_components/moment/moment.js',
                 ('js/bower_components/tc-angular-chartjs/dist/'
                  'tc-angular-chartjs.js'),
@@ -183,7 +180,7 @@ PIPELINE = {
     }
 }
 
-# We use uglify instead of yuglify otherwise jQuery blows up
+# npm install -g uglify-js
 PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 
-PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.cssmin.NoopCompressor'
+PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.NoopCompressor'
