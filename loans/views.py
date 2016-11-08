@@ -57,6 +57,7 @@ class CalculateLoanSchedule(generics.views.APIView):
                                                       extra_payment)
                 loan_periods = [period for period in loan_periods_gen]
 
+                # build an object based on what Chart.js is expecting
                 dataset = {
                     'label': loan['debt_name'],
                     'data': loan_periods,

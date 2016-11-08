@@ -1,8 +1,8 @@
 from django.conf.urls import url
 
-from .views import CalculateLoanView
+from .views import CalculateLoanSchedule
 
 
 urlpatterns = [
-    url(r'^calculate$', CalculateLoanView.as_view()),
+    url(r'^calculate$', CalculateLoanSchedule.as_view()),
 ]

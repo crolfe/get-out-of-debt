@@ -1,6 +1,8 @@
 *.pyc
 *.sqlite3
 *.swp
+.cache/
+.coverage
 .idea
 bower_components
 env/

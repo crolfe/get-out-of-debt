@@ -89,22 +89,18 @@ USE_TZ = True
 
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'DIRS': [
-                local_path('templates')
-            ],
+    'DIRS': [local_path('templates')],
     'APP_DIRS': True,
     'OPTIONS': {'context_processors': [
-                    'django.contrib.auth.context_processors.auth',
-                    'django.template.context_processors.debug',
-                    'django.template.context_processors.i18n',
-                    'django.template.context_processors.media',
-                    'django.template.context_processors.static',
-                    'django.template.context_processors.tz',
-                    'django.contrib.messages.context_processors.messages'],
-
-                },
-    }
-]
+        'django.contrib.auth.context_processors.auth',
+        'django.template.context_processors.debug',
+        'django.template.context_processors.i18n',
+        'django.template.context_processors.media',
+        'django.template.context_processors.static',
+        'django.template.context_processors.tz',
+        'django.contrib.messages.context_processors.messages'],
+    },
+}]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -128,22 +124,17 @@ CORS_ORIGIN_ALLOW_ALL = True
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 
-
 PIPELINE = {
     # 'PIPELINE_COLLECTOR_ENABLED': True,
     'STYLESHEETS': {
         'vendor': {
-            'source_filenames': (
-                'css/foundation.css',
-                ),
+            'source_filenames': ('css/foundation.css',),
             'output_filename': 'loans/css/vendor.css'
-            },
+        },
         'loans': {
-            'source_filenames': (
-                'loans/css/loans.css',
-                ),
+            'source_filenames': ('loans/css/loans.css',),
             'output_filename': 'loans/css/app.css'
-            }
+        }
     },
     'JAVASCRIPT': {
         'vendor': {
