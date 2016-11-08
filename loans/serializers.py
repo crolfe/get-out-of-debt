@@ -7,6 +7,12 @@ from rest_framework import serializers as s
 MAX_REPAYMENT_PERIODS = 360   # 30 years * 12 months
 
 
+def max_repayment_error(months):
+    error = ('This loan will take {} months to pay off '
+             '(and will probably never be paid off).')
+    return error.format(months)
+
+
 def round_decimal(amount):
     return amount.quantize(Decimal(".01"), rounding=ROUND_HALF_UP)
 
@@ -22,24 +28,10 @@ class DebtSerializer(s.Serializer):
                                    min_value=0, decimal_places=2)
 
     def _get_num_payments(self, principal, monthly_payment):
-        try:
-            num_payments = int(principal / monthly_payment)
-            if principal % monthly_payment != 0:
-                num_payments += 1
-            return num_payments
-        except ZeroDivisionError:
-            return 0
-
-    def validate_principal(self, principal):
-        if principal == Decimal(0):
-            raise s.ValidationError('Please specify an amount > 0')
-
-        return principal
-
-    def validate_monthly_payment(self, monthly_payment):
-        if monthly_payment == Decimal(0):
-            raise s.ValidationError('Please specify an amount > 0')
-        return monthly_payment
+        num_payments = int(principal / monthly_payment)
+        if principal % monthly_payment != 0:
+            num_payments += 1
+        return num_payments
 
     def validate(self, attrs):
         monthly_payment = attrs['monthly_payment']
@@ -50,8 +42,6 @@ class DebtSerializer(s.Serializer):
         num_payments = self._get_num_payments(principal, total_monthly)
 
         if num_payments > MAX_REPAYMENT_PERIODS:
-            error = ('This loan will take {} months to pay off '
-                     '(and will probably never be paid off).')
-            raise ValidationError(error.format(num_payments))
+            raise ValidationError(max_repayment_error(num_payments))
 
         return attrs
