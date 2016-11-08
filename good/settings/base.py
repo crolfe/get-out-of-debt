@@ -102,30 +102,19 @@ TEMPLATES = [{
     },
 }]
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
-
 STATIC_URL = '/static/'
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'pipeline.finders.PipelineFinder'
 )
-
 STATICFILES_DIRS = (
     local_path('resources'),
 )
-
 STATIC_ROOT = local_path('static')
-
-CORS_ORIGIN_ALLOW_ALL = True
-
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
-
 PIPELINE = {
-    # 'PIPELINE_COLLECTOR_ENABLED': True,
     'STYLESHEETS': {
         'vendor': {
             'source_filenames': ('css/foundation.css',),
@@ -171,5 +160,4 @@ PIPELINE = {
 
 # npm install -g uglify-js
 PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
-
 PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.NoopCompressor'
