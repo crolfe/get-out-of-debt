@@ -1,4 +1,4 @@
-Django==1.9.11
+Django==1.11.28
 Werkzeug==0.9.6
 
 django-extensions==1.7.4
